@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
+use App\Http\Requests\StoreEventRequest;
 use App\Models\Event;
 
 class EventController extends Controller
@@ -17,5 +16,11 @@ class EventController extends Controller
     public function show($event)
     {
         return Event::find($event);
+    }
+
+    public function store(StoreEventRequest $request)
+    {
+        $validatedData = $request->only(['name', 'from_date', 'to_date']);
+        return Event::create($validatedData);
     }
 }
