@@ -10,7 +10,7 @@ class EventController extends Controller
 {
     public function index()
     {
-        return Event::paginate(5);
+        return Event::orderBy('created_at', 'desc')->paginate(5);
     }
 
     public function show($event)
