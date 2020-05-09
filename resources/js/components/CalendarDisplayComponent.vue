@@ -3,7 +3,6 @@
         <div class="card-header">
             <h2>{{ moment().format("MMMM YYYY") }}</h2>
         </div>
-
         <div class="card-body p-0">
             <div
                 v-for="day in days"
@@ -24,6 +23,9 @@
 <script>
 import moment from "moment";
 export default {
+    props: {
+        eventId: Number
+    },
     data() {
         return {
             event: {
@@ -39,6 +41,11 @@ export default {
     },
     created() {
         this.fetchEvents();
+    },
+    watch: {
+        eventId: function() {
+            this.fetchEvents();
+        }
     },
     methods: {
         fetchEvents() {

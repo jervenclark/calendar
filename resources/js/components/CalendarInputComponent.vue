@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="addEvent">
+    <form @submit.prevent="addEvent" class="mt-4 pt-3">
         <div class="form-group">
             <label for="eventNameInput">Event</label>
             <input
@@ -38,7 +38,13 @@
                 </label>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button
+            type="submit"
+            class="btn btn-primary"
+            v-bind:class="{ disabled: processing }"
+        >
+            Submit
+        </button>
     </form>
 </template>
 
@@ -53,7 +59,8 @@ export default {
                 name: "",
                 days: [],
                 dateRange: []
-            }
+            },
+            processing: false
         };
     },
     components: {
@@ -61,6 +68,7 @@ export default {
     },
     methods: {
         addEvent() {
+            this.processing = true;
             var dates = this.event.dateRange.map(date =>
                 moment(date).format("YYYY-MM-DD")
             );
@@ -76,7 +84,21 @@ export default {
                 headers: {
                     "content-type": "application/json"
                 }
-            });
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.id) {
+                        this.$emit("calendarEventAdded", res.id);
+                        this.event = {
+                            name: "",
+                            days: [],
+                            dateRange: []
+                        };
+                    }
+                })
+                .finally(_ => {
+                    this.processing = false;
+                });
         }
     }
 };

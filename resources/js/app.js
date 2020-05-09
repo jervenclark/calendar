@@ -23,13 +23,8 @@ Vue.prototype.moment = moment;
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component(
-    "calendar-display-component",
-    require("./components/CalendarDisplayComponent.vue").default
-);
-
-Vue.component(
-    "calendar-input-component",
-    require("./components/CalendarInputComponent.vue").default
+    "calendar-component",
+    require("./components/CalendarComponent.vue").default
 );
 
 /**
