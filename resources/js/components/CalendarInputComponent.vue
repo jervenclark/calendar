@@ -6,101 +6,35 @@
                 type="text"
                 class="form-control"
                 id="eventNameInput"
+                name="eventNameInput"
                 placeholder="My Event"
                 v-model="name"
             />
         </div>
         <div class="form-group">
             <label for="eventDateRangeInput">Date Range</label>
-            <div class="input-group input-daterange">
-                <input type="text" class="form-control" value="2012-04-05" />
-                <div class="input-group-addon">to</div>
-                <input type="text" class="form-control" value="2012-04-19" />
-            </div>
+            <date-picker
+                class="d-block w-100"
+                id="eventDateRangeInput"
+                name="eventDateRangeInput"
+                range
+                format="YYYY-MM-DD"
+                v-model="dateRange"
+            ></date-picker>
         </div>
         <div class="form-group">
-            <div class="form-check form-check-inline">
+            <div
+                class="form-check form-check-inline"
+                v-for="(day, index) in weekDays"
+            >
                 <input
                     class="form-check-input"
                     type="checkbox"
-                    id="eventDayMondayInput"
-                    value="Mon"
+                    :value="{ day }"
                     v-model="days"
                 />
-                <label class="form-check-label" for="eventDayMondayInput">
-                    Mon
-                </label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="eventDayTuesdayInput"
-                    value="Tue"
-                    v-model="days"
-                />
-                <label class="form-check-label" for="eventDayTuesdayInput">
-                    Tue
-                </label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="eventDayWednesdayInput"
-                    value="Wed"
-                    v-model="days"
-                />
-                <label class="form-check-label" for="eventDayWednesdayInput">
-                    Wed
-                </label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="eventDayThursdayInput"
-                    value="Thu"
-                    v-model="days"
-                />
-                <label class="form-check-label" for="eventDayThursdayInput">
-                    Thu
-                </label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="eventDayFridayInput"
-                    value="Fri"
-                    v-model="days"
-                />
-                <label class="form-check-label" for="eventDayFridayInput">
-                    Fri
-                </label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="eventDaySaturdayInput"
-                    value="Sat"
-                    v-model="days"
-                />
-                <label class="form-check-label" for="eventDaySaturdayInput">
-                    Sat
-                </label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="eventDaySundayInput"
-                    value="Sun"
-                    v-model="days"
-                />
-                <label class="form-check-label" for="eventDaySundayInput">
-                    Sun
+                <label class="form-check-label">
+                    {{ day }}
                 </label>
             </div>
             {{ days }}
@@ -110,14 +44,18 @@
 </template>
 
 <script>
+import DatePicker from "vue2-datepicker";
 export default {
     data() {
         return {
+            weekDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
             name: "",
-            from_date: "",
-            to_date: "",
-            days: []
+            days: [],
+            dateRange: "ciao"
         };
+    },
+    components: {
+        DatePicker
     }
 };
 </script>
