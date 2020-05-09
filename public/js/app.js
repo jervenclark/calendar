@@ -189,7 +189,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue2_datepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue2-datepicker */ "./node_modules/vue2-datepicker/index.esm.js");
-//
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
 //
 //
 //
@@ -235,17 +236,42 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       weekDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-      name: "",
-      days: [],
-      dateRange: "ciao"
+      event: {
+        name: "",
+        days: [],
+        dateRange: []
+      }
     };
   },
   components: {
     DatePicker: vue2_datepicker__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  methods: {
+    addEvent: function addEvent() {
+      var dates = this.event.dateRange.map(function (date) {
+        return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format("YYYY-MM-DD");
+      });
+      var body = {
+        name: this.event.name,
+        from_date: dates[0],
+        to_date: dates[1],
+        days: this.event.days.map(function (d) {
+          return d.day;
+        }).join(" ")
+      };
+      fetch("api/events", {
+        method: "post",
+        body: JSON.stringify(body),
+        headers: {
+          "content-type": "application/json"
+        }
+      });
+    }
   }
 });
 
@@ -57101,70 +57127,79 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("form", [
-    _c("div", { staticClass: "form-group" }, [
-      _c("label", { attrs: { for: "eventNameInput" } }, [_vm._v("Event")]),
-      _vm._v(" "),
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.name,
-            expression: "name"
-          }
-        ],
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          id: "eventNameInput",
-          name: "eventNameInput",
-          placeholder: "My Event"
-        },
-        domProps: { value: _vm.name },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
-            }
-            _vm.name = $event.target.value
-          }
+  return _c(
+    "form",
+    {
+      on: {
+        submit: function($event) {
+          $event.preventDefault()
+          return _vm.addEvent($event)
         }
-      })
-    ]),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "form-group" },
-      [
-        _c("label", { attrs: { for: "eventDateRangeInput" } }, [
-          _vm._v("Date Range")
-        ]),
+      }
+    },
+    [
+      _c("div", { staticClass: "form-group" }, [
+        _c("label", { attrs: { for: "eventNameInput" } }, [_vm._v("Event")]),
         _vm._v(" "),
-        _c("date-picker", {
-          staticClass: "d-block w-100",
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.event.name,
+              expression: "event.name"
+            }
+          ],
+          staticClass: "form-control",
           attrs: {
-            id: "eventDateRangeInput",
-            name: "eventDateRangeInput",
-            range: "",
-            format: "YYYY-MM-DD"
+            type: "text",
+            id: "eventNameInput",
+            name: "eventNameInput",
+            placeholder: "My Event"
           },
-          model: {
-            value: _vm.dateRange,
-            callback: function($$v) {
-              _vm.dateRange = $$v
-            },
-            expression: "dateRange"
+          domProps: { value: _vm.event.name },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.event, "name", $event.target.value)
+            }
           }
         })
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "form-group" },
-      [
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "form-group" },
+        [
+          _c("label", { attrs: { for: "eventDateRangeInput" } }, [
+            _vm._v("Date Range")
+          ]),
+          _vm._v(" "),
+          _c("date-picker", {
+            staticClass: "d-block w-100",
+            attrs: {
+              id: "eventDateRangeInput",
+              name: "eventDateRangeInput",
+              range: "",
+              format: "YYYY-MM-DD"
+            },
+            model: {
+              value: _vm.event.dateRange,
+              callback: function($$v) {
+                _vm.$set(_vm.event, "dateRange", $$v)
+              },
+              expression: "event.dateRange"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "form-group" },
         _vm._l(_vm.weekDays, function(day, index) {
           return _c("div", { staticClass: "form-check form-check-inline" }, [
             _c("input", {
@@ -57172,36 +57207,38 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.days,
-                  expression: "days"
+                  value: _vm.event.days,
+                  expression: "event.days"
                 }
               ],
               staticClass: "form-check-input",
               attrs: { type: "checkbox" },
               domProps: {
                 value: { day: day },
-                checked: Array.isArray(_vm.days)
-                  ? _vm._i(_vm.days, { day: day }) > -1
-                  : _vm.days
+                checked: Array.isArray(_vm.event.days)
+                  ? _vm._i(_vm.event.days, { day: day }) > -1
+                  : _vm.event.days
               },
               on: {
                 change: function($event) {
-                  var $$a = _vm.days,
+                  var $$a = _vm.event.days,
                     $$el = $event.target,
                     $$c = $$el.checked ? true : false
                   if (Array.isArray($$a)) {
                     var $$v = { day: day },
                       $$i = _vm._i($$a, $$v)
                     if ($$el.checked) {
-                      $$i < 0 && (_vm.days = $$a.concat([$$v]))
+                      $$i < 0 && _vm.$set(_vm.event, "days", $$a.concat([$$v]))
                     } else {
                       $$i > -1 &&
-                        (_vm.days = $$a
-                          .slice(0, $$i)
-                          .concat($$a.slice($$i + 1)))
+                        _vm.$set(
+                          _vm.event,
+                          "days",
+                          $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                        )
                     }
                   } else {
-                    _vm.days = $$c
+                    _vm.$set(_vm.event, "days", $$c)
                   }
                 }
               }
@@ -57212,17 +57249,16 @@ var render = function() {
             ])
           ])
         }),
-        _vm._v("\n        " + _vm._s(_vm.days) + "\n    ")
-      ],
-      2
-    ),
-    _vm._v(" "),
-    _c(
-      "button",
-      { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-      [_vm._v("Submit")]
-    )
-  ])
+        0
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+        [_vm._v("Submit")]
+      )
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

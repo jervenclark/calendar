@@ -1,5 +1,5 @@
 <template>
-    <form>
+    <form @submit.prevent="addEvent">
         <div class="form-group">
             <label for="eventNameInput">Event</label>
             <input
@@ -8,7 +8,7 @@
                 id="eventNameInput"
                 name="eventNameInput"
                 placeholder="My Event"
-                v-model="name"
+                v-model="event.name"
             />
         </div>
         <div class="form-group">
@@ -19,7 +19,7 @@
                 name="eventDateRangeInput"
                 range
                 format="YYYY-MM-DD"
-                v-model="dateRange"
+                v-model="event.dateRange"
             ></date-picker>
         </div>
         <div class="form-group">
@@ -31,13 +31,12 @@
                     class="form-check-input"
                     type="checkbox"
                     :value="{ day }"
-                    v-model="days"
+                    v-model="event.days"
                 />
                 <label class="form-check-label">
                     {{ day }}
                 </label>
             </div>
-            {{ days }}
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
@@ -45,17 +44,40 @@
 
 <script>
 import DatePicker from "vue2-datepicker";
+import moment from "moment";
 export default {
     data() {
         return {
             weekDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            name: "",
-            days: [],
-            dateRange: "ciao"
+            event: {
+                name: "",
+                days: [],
+                dateRange: []
+            }
         };
     },
     components: {
         DatePicker
+    },
+    methods: {
+        addEvent() {
+            var dates = this.event.dateRange.map(date =>
+                moment(date).format("YYYY-MM-DD")
+            );
+            var body = {
+                name: this.event.name,
+                from_date: dates[0],
+                to_date: dates[1],
+                days: this.event.days.map(d => d.day).join(" ")
+            };
+            fetch("api/events", {
+                method: "post",
+                body: JSON.stringify(body),
+                headers: {
+                    "content-type": "application/json"
+                }
+            });
+        }
     }
 };
 </script>
