@@ -2,7 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\AlphaNumericSpaces;
+use App\Rules\AlphaNumericSpacesRule;
+use App\Rules\WeekDaysRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -21,10 +22,11 @@ class StoreEventRequest extends FormRequest
                 'bail',
                 'required',
                 'unique:events',
-                new AlphaNumericSpaces()
+                new AlphaNumericSpacesRule()
             ],
             'from_date' => ['bail', 'required', 'date_format:Y-m-d'],
-            'to_date' => ['bail', 'required', 'date_format:Y-m-d']
+            'to_date' => ['bail', 'required', 'date_format:Y-m-d'],
+            'days' => ['required', new WeekDaysRule()]
         ];
     }
 

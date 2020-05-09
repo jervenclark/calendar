@@ -4,7 +4,7 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class AlphaNumericSpacesRule implements Rule
+class WeekDaysRule implements Rule
 {
     /**
      * Create a new rule instance.
@@ -25,8 +25,9 @@ class AlphaNumericSpacesRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        $pattern = '/(^[a-zA-Z0-9 ]+$)+/';
-        return preg_match($pattern, $value);
+        $pattern =
+            '/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)(\s(Mon|Tue|Wed|Thu|Fri|Sat|Sun))*$/';
+        return preg_match($pattern, $value, $match);
     }
 
     /**

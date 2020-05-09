@@ -7,6 +7,7 @@
                 class="form-control"
                 id="eventNameInput"
                 placeholder="My Event"
+                v-model="name"
             />
         </div>
         <div class="form-group">
@@ -23,7 +24,8 @@
                     class="form-check-input"
                     type="checkbox"
                     id="eventDayMondayInput"
-                    value="monday"
+                    value="Mon"
+                    v-model="days"
                 />
                 <label class="form-check-label" for="eventDayMondayInput">
                     Mon
@@ -34,7 +36,8 @@
                     class="form-check-input"
                     type="checkbox"
                     id="eventDayTuesdayInput"
-                    value="tuesday"
+                    value="Tue"
+                    v-model="days"
                 />
                 <label class="form-check-label" for="eventDayTuesdayInput">
                     Tue
@@ -45,7 +48,8 @@
                     class="form-check-input"
                     type="checkbox"
                     id="eventDayWednesdayInput"
-                    value="wednesday"
+                    value="Wed"
+                    v-model="days"
                 />
                 <label class="form-check-label" for="eventDayWednesdayInput">
                     Wed
@@ -56,7 +60,8 @@
                     class="form-check-input"
                     type="checkbox"
                     id="eventDayThursdayInput"
-                    value="thursday"
+                    value="Thu"
+                    v-model="days"
                 />
                 <label class="form-check-label" for="eventDayThursdayInput">
                     Thu
@@ -67,7 +72,8 @@
                     class="form-check-input"
                     type="checkbox"
                     id="eventDayFridayInput"
-                    value="friday"
+                    value="Fri"
+                    v-model="days"
                 />
                 <label class="form-check-label" for="eventDayFridayInput">
                     Fri
@@ -78,7 +84,8 @@
                     class="form-check-input"
                     type="checkbox"
                     id="eventDaySaturdayInput"
-                    value="saturday"
+                    value="Sat"
+                    v-model="days"
                 />
                 <label class="form-check-label" for="eventDaySaturdayInput">
                     Sat
@@ -89,17 +96,28 @@
                     class="form-check-input"
                     type="checkbox"
                     id="eventDaySundayInput"
-                    value="sunday"
+                    value="Sun"
+                    v-model="days"
                 />
                 <label class="form-check-label" for="eventDaySundayInput">
                     Sun
                 </label>
             </div>
+            {{ days }}
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </template>
 
 <script>
-export default {};
+export default {
+    data() {
+        return {
+            name: "",
+            from_date: "",
+            to_date: "",
+            days: []
+        };
+    }
+};
 </script>

@@ -20,7 +20,12 @@ class EventController extends Controller
 
     public function store(StoreEventRequest $request)
     {
-        $validatedData = $request->only(['name', 'from_date', 'to_date']);
+        $validatedData = $request->only([
+            'name',
+            'from_date',
+            'to_date',
+            'days'
+        ]);
         return Event::create($validatedData);
     }
 }

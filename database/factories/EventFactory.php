@@ -15,6 +15,13 @@ $factory->define(Event::class, function (Faker $faker) {
         'to_date' => $faker->dateTimeBetween(
             $startDate = '-10 years',
             $endDate = 'now'
+        ),
+        'days' => join(
+            ' ',
+            $faker->randomElements(
+                ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                $count = $faker->numberBetween(1, 7)
+            )
         )
     ];
 });

@@ -9,12 +9,12 @@
                 v-for="day in days"
                 class="border-bottom p-3"
                 v-bind:class="{
-                    'alert-success': day.between
+                    'alert-success': day.valid
                 }"
             >
                 <div class="row">
                     <div class="col-4">{{ day.date.format("DD ddd ") }}</div>
-                    <div class="col-8">{{ day.between ? event.name : "" }}</div>
+                    <div class="col-8">{{ day.valid ? event.name : "" }}</div>
                 </div>
             </div>
         </div>
@@ -34,7 +34,6 @@ export default {
                 created_at: "",
                 updated_at: ""
             },
-            totalDays: "",
             days: []
         };
     },
@@ -46,24 +45,26 @@ export default {
             fetch("api/events")
                 .then(res => res.json())
                 .then(res => {
-                    event = res.data[0];
-                    if (event) {
-                        this.event = event;
+                    if (res.data[0]) {
+                        this.event = res.data[0];
                     }
                 })
                 .finally(_ => {
                     this.days = [...Array(moment().daysInMonth()).keys()].map(
                         key => {
+                            var { days, from_date, to_date } = this.event;
                             var day = moment().date(key + 1);
                             return {
                                 date: day,
-                                between:
-                                    this.event.from_date && this.event.to_date
+                                valid:
+                                    days.includes(day.format("ddd")) &&
+                                    from_date &&
+                                    to_date
                                         ? moment(
                                               day.format("YYYY-MM-DD")
                                           ).isBetween(
-                                              this.event.from_date,
-                                              this.event.to_date,
+                                              from_date,
+                                              to_date,
                                               null,
                                               "[]"
                                           )

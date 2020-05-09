@@ -11,5 +11,10 @@ class Event extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'from_date', 'to_date'];
+    protected $fillable = ['name', 'from_date', 'to_date', 'days'];
+
+    public function getDaysAttribute()
+    {
+        return explode(' ', $this->attributes['days']);
+    }
 }
